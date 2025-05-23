@@ -87,7 +87,7 @@ document.addEventListener('DOMContentLoaded', () => {
             // });
             // const result = await response.json();
             if (window.Telegram.WebApp) {
-                console.log("data:", data);
+                alert(WebApp.initData)
                 Telegram.WebApp.sendData(JSON.stringify(data));
                 alert("sent: ",data)
             } else {
