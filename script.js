@@ -70,15 +70,16 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (!isValid) return;
 
-        const data = new FormData();
-        data.append('title', fields.title.element.value.trim());
-        data.append('description', fields.description.element.value.trim());
-        data.append('price', fields.price.element.value.trim());
-        data.append('currency', currency);
-        data.append('link', fields.link.element.value.trim());
-        if (imageInput.files[0]) {
-            data.append('image', imageInput.files[0]);
-        }
+        const data = {
+            title: fields.title.element.value.trim(),
+            description: fields.description.element.value.trim(),
+            price: fields.price.element.value.trim(),
+            currency: currency,
+            link: fields.link.element.value.trim(),
+            image: imageInput.files[0] ? imageInput.files[0].name : null // Сохраняем только имя файла
+        };
+
+        const jsonData = JSON.stringify(data);
 
         try {
             // const response = await fetch('/upload', {
@@ -88,9 +89,8 @@ document.addEventListener('DOMContentLoaded', () => {
             // const result = await response.json();
             if (window.Telegram.WebApp) {
                 // alert(window.Telegram.WebApp.initData)
-                alert(JSON.stringify(data))
-                window.Telegram.WebApp.sendData(JSON.stringify(data));
-                alert("sent: ",data)
+                alert("data:",jsonData)
+                window.Telegram.WebApp.sendData(jsonData);
             } else {
                 alert('Telegram API недоступен');
             }
