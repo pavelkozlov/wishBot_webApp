@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Добавление подарка</title>
+    <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+    <div class="container">
+        <h1>Добавление нового подарка</h1>
+        <form id="giftForm">
+            <label>Название</label>
+            <input type="text" id="title" name="title" />
+            <div class="error" id="titleError"></div>
+
+            <label>Описание</label>
+            <textarea id="description" name="description"></textarea>
+            <div class="error" id="descriptionError"></div>
+
+            <label>Цена</label>
+            <input type="number" id="price" name="price" />
+            <div class="error" id="priceError"></div>
+
+            <label>Валюта</label>
+            <div class="currency-buttons">
+                <button type="button" class="currency" data-value="EUR">EUR</button>
+                <button type="button" class="currency" data-value="RUB">RUB</button>
+                <button type="button" class="currency" data-value="USD">USD</button>
+            </div>
+            <div class="error" id="currencyError"></div>
+
+            <label>Ссылка</label>
+            <input type="url" id="link" name="link" />
+            <div class="error" id="linkError"></div>
+
+            <label>Картинка</label>
+            <input type="file" id="image" name="image" accept="image/*" />
+            <img id="imagePreview" style="display:none;" />
+            <div class="error" id="imageError"></div>
+
+            <button type="submit">Создать</button>
+        </form>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
