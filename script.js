@@ -89,6 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
             if (window.Telegram.WebApp) {
                 console.log("data:", data);
                 Telegram.WebApp.sendData(JSON.stringify(data));
+                alert("sent: ",data)
             } else {
                 alert('Telegram API недоступен');
             }
