@@ -81,13 +81,14 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         try {
-            const response = await fetch('/upload', {
-                method: 'POST',
-                body: data
-            });
-            const result = await response.json();
+            // const response = await fetch('/upload', {
+            //     method: 'POST',
+            //     body: data
+            // });
+            // const result = await response.json();
             if (window.Telegram.WebApp) {
-                Telegram.WebApp.sendData(JSON.stringify(result));
+                console.log("data:", data);
+                Telegram.WebApp.sendData(JSON.stringify(data));
             } else {
                 alert('Telegram API недоступен');
             }
