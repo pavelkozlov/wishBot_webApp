@@ -8,6 +8,7 @@ function sendToTelegram() {
   console.log('Отправка:', data)
 
   if (window.Telegram && Telegram.WebApp) {
+    Telegram.WebApp.ready();
     Telegram.WebApp.sendData(JSON.stringify(data))
   } else {
     console.warn('Telegram API недоступен')

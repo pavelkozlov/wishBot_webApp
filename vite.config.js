@@ -6,6 +6,11 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vite.dev/config/
 export default defineConfig({
+  server: {
+    allowedHosts: [
+      "pavelkozlov.github.io/wishBot_webApp"
+    ]
+  },
   plugins: [
     vue(),
     vueDevTools(),
