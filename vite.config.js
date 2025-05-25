@@ -5,7 +5,6 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
   base: '/wishBot_webApp/', // 👈 имя репозитория на GitHub
-  publicPath: '/wishBot_webApp/', // 👈 имя репозитория на GitHub
   plugins: [
     vue(),
     vueDevTools(),
