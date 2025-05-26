@@ -1,14 +1,17 @@
 <script setup>
-import { ref, watch } from 'vue'
+import {onMounted, ref, watch} from 'vue'
 
 const name = ref('')
 const description = ref('')
 const price = ref('')
 const currency = ref('EUR')
 const link = ref('')
+const image = ref('')
+const previewUrl = ref('')
+const fileInput = ref(null)
+
 const error = ref('')
 
-// Убираем ошибку при вводе в поле "Название"
 watch(name, (value) => {
   if (value.trim()) {
     error.value = ''
@@ -18,6 +21,30 @@ watch(name, (value) => {
 function setCurrency(value) {
   currency.value = value
 }
+
+function handleImageUpload(event) {
+  const file = event.target.files[0]
+  if (!file) return
+
+  const reader = new FileReader()
+
+  reader.onload = () => {
+    image.value = reader.result
+    previewUrl.value = reader.result
+  }
+
+  reader.readAsDataURL(file)
+}
+
+
+onMounted(() => {
+  if (window.Telegram?.WebApp) {
+    Telegram.WebApp.ready()
+    Telegram.WebApp.MainButton.setText("Отправить")
+    Telegram.WebApp.MainButton.onClick(sendToTelegram)
+    Telegram.WebApp.MainButton.show()
+  }
+})
 
 function sendToTelegram() {
   if (!name.value.trim()) {
@@ -31,17 +58,10 @@ function sendToTelegram() {
     price: parseInt(price.value, 10) || 0,
     currency: currency.value,
     link: link.value.trim(),
+    image: image.value,
   }
 
-  console.log('Отправка:', message)
-
-  if (window.Telegram && Telegram.WebApp) {
-    Telegram.WebApp.ready()
-    Telegram.WebApp.sendData(JSON.stringify(message))
-    Telegram.WebApp.close() // Закрываем WebApp после отправки
-  } else {
-    console.warn('Telegram API недоступен')
-  }
+  Telegram.WebApp.sendData(JSON.stringify(message))
 }
 </script>
 
@@ -66,9 +86,21 @@ function sendToTelegram() {
       </span>
     </div>
 
-    <input v-model="link" placeholder="Ссылка" />
+    <input v-model="link" placeholder="Ссылка (необязательно)" />
 
-    <button @click="sendToTelegram">Сохранить</button>
+    <div class="image-upload">
+      <button class="upload-btn" @click="$refs.fileInput.click()">Загрузить изображение</button>
+      <span class="file-note">Только JPG или PNG</span>
+      <input
+          ref="fileInput"
+          type="file"
+          @change="handleImageUpload"
+          accept="image/jpeg,image/png"
+          style="display: none"
+      />
+    </div>
+
+    <img v-if="previewUrl" :src="previewUrl" alt="Превью" class="preview" />
   </div>
 </template>
 
@@ -125,6 +157,34 @@ input {
   color: white;
   font-weight: bold;
   border-color: #007aff;
+}
+
+.image-upload {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  margin-bottom: 1rem;
+}
+
+.upload-btn {
+  padding: 0.5rem 1rem;
+  background: #007aff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  margin-bottom: 0.3rem;
+}
+
+.upload-btn:hover {
+  background: #005bbb;
+}
+
+.file-note {
+  font-size: 0.85rem;
+  color: #666;
 }
 
 button {
