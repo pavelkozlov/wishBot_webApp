@@ -24,7 +24,7 @@ function handleImageUpload(event) {
   const file = event.target.files[0]
   if (!file) return
 
-  const maxSizeKB = 3 * 1024 // ~3 KB
+  const maxSizeKB = 3000 * 1024 // ~3 MB
   if (file.size > maxSizeKB) {
     imageError.value = 'Файл слишком большой. До 3KB.'
     return
@@ -95,7 +95,7 @@ function sendToTelegram() {
 
     <div class="image-upload">
       <button class="upload-btn" @click="$refs.fileInput.click()">Загрузить изображение</button>
-      <span class="file-note">JPG или PNG, до 3KB</span>
+      <span class="file-note">JPG или PNG, до 3MB</span>
       <div v-if="imageError" class="error">{{ imageError }}</div>
       <input
           ref="fileInput"
