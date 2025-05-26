@@ -4,7 +4,7 @@ import vue from '@vitejs/plugin-vue'
 import vueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
-  base: '/wishBot_webApp/', // 👈 имя репозитория на GitHub
+  base: '/wishBot_webApp/',
   plugins: [
     vue(),
     vueDevTools(),
