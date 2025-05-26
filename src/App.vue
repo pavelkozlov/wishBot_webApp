@@ -12,6 +12,15 @@ const fileInput = ref(null)
 const error = ref('')
 const imageError = ref('')
 
+function removeImage() {
+  image.value = ''
+  previewUrl.value = ''
+  imageError.value = ''
+  if (fileInput.value) {
+    fileInput.value.value = '' // сброс выбранного файла
+  }
+}
+
 watch(name, (value) => {
   if (value.trim()) error.value = ''
 })
@@ -66,7 +75,10 @@ function sendToTelegram() {
   }
 
   Telegram.WebApp.sendData(JSON.stringify(message))
-  Telegram.WebApp.close()
+
+  setTimeout(() => {
+    Telegram.WebApp.close()
+  }, 100)
 }
 </script>
 
@@ -107,6 +119,7 @@ function sendToTelegram() {
     </div>
 
     <img v-if="previewUrl" :src="previewUrl" class="preview" alt="Превью" />
+    <button v-if="previewUrl" class="remove-btn" @click="removeImage">Удалить изображение</button>
   </div>
 </template>
 
@@ -201,4 +214,22 @@ input {
   border-radius: 6px;
   border: 1px solid #ddd;
 }
+
+.remove-btn {
+  margin-top: 8px;
+  background: #ff3b30;
+  color: white;
+  border: none;
+  padding: 8px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  display: block;
+  width: 100%;
+}
+
+.remove-btn:hover {
+  background: #d32f2f;
+}
+
 </style>
