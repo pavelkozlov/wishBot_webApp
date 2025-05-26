@@ -1,5 +1,5 @@
 <script setup>
-import {onMounted, ref, watch} from 'vue'
+import { onMounted, ref, watch } from 'vue'
 
 const name = ref('')
 const description = ref('')
@@ -9,13 +9,11 @@ const link = ref('')
 const image = ref('')
 const previewUrl = ref('')
 const fileInput = ref(null)
-
 const error = ref('')
+const imageError = ref('')
 
 watch(name, (value) => {
-  if (value.trim()) {
-    error.value = ''
-  }
+  if (value.trim()) error.value = ''
 })
 
 function setCurrency(value) {
@@ -26,15 +24,21 @@ function handleImageUpload(event) {
   const file = event.target.files[0]
   if (!file) return
 
-  const reader = new FileReader()
+  const maxSizeKB = 3 * 1024 // ~3 KB
+  if (file.size > maxSizeKB) {
+    imageError.value = 'Файл слишком большой. До 3KB.'
+    return
+  }
 
+  imageError.value = ''
+  const reader = new FileReader()
   reader.onload = () => {
     image.value = reader.result
     previewUrl.value = reader.result
   }
-
   reader.readAsDataURL(file)
 }
+
 
 
 onMounted(() => {
@@ -74,7 +78,7 @@ function sendToTelegram() {
     <div v-if="error" class="error">{{ error }}</div>
 
     <input v-model="description" placeholder="Описание" />
-    <input v-model="price" placeholder="Цена" type="number" />
+    <input v-model="price" type="number" placeholder="Цена" />
 
     <div class="currency-selector">
       <span
@@ -91,40 +95,42 @@ function sendToTelegram() {
 
     <div class="image-upload">
       <button class="upload-btn" @click="$refs.fileInput.click()">Загрузить изображение</button>
-      <span class="file-note">Только JPG или PNG</span>
+      <span class="file-note">JPG или PNG, до 3KB</span>
+      <div v-if="imageError" class="error">{{ imageError }}</div>
       <input
           ref="fileInput"
           type="file"
-          @change="handleImageUpload"
           accept="image/jpeg,image/png"
+          @change="handleImageUpload"
           style="display: none"
       />
     </div>
 
-    <img v-if="previewUrl" :src="previewUrl" alt="Превью" class="preview" />
+    <img v-if="previewUrl" :src="previewUrl" class="preview" alt="Превью" />
   </div>
 </template>
 
 <style scoped>
 .container {
-  max-width: 500px;
+  max-width: 480px;
   margin: 0 auto;
-  padding: 1rem;
+  padding: 16px;
   font-family: system-ui, sans-serif;
+  font-size: 16px;
 }
 
 h1 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
   text-align: center;
+  margin-bottom: 20px;
+  font-size: 1.4rem;
 }
 
 input {
   width: 100%;
-  margin-bottom: 0.75rem;
-  padding: 0.5rem;
+  padding: 10px;
+  margin-bottom: 12px;
   font-size: 1rem;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   border-radius: 6px;
   box-sizing: border-box;
 }
@@ -138,45 +144,42 @@ input {
 .currency-selector {
   display: flex;
   justify-content: space-between;
-  margin-bottom: 1rem;
+  margin-bottom: 12px;
 }
 
 .currency-button {
   flex: 1;
+  padding: 10px;
   text-align: center;
-  margin: 0 0.25rem;
-  padding: 0.5rem;
-  border: 1px solid #ddd;
+  margin: 0 4px;
+  border: 1px solid #ccc;
   border-radius: 6px;
-  background: #f0f0f0;
+  background: #f3f3f3;
   cursor: pointer;
-  user-select: none;
+  transition: 0.2s;
 }
 
 .currency-button.active {
   background: #007aff;
-  color: white;
+  color: #fff;
   font-weight: bold;
   border-color: #007aff;
 }
 
 .image-upload {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  margin-bottom: 1rem;
+  margin-top: 12px;
+  margin-bottom: 12px;
 }
 
 .upload-btn {
-  padding: 0.5rem 1rem;
+  display: inline-block;
+  padding: 10px 16px;
+  font-size: 1rem;
   background: #007aff;
-  color: white;
+  color: #fff;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-  font-size: 1rem;
-  font-weight: 500;
-  margin-bottom: 0.3rem;
 }
 
 .upload-btn:hover {
@@ -184,23 +187,18 @@ input {
 }
 
 .file-note {
+  display: block;
+  margin-top: 4px;
   font-size: 0.85rem;
   color: #666;
 }
 
-button {
+.preview {
   width: 100%;
-  padding: 0.75rem;
-  background: #007aff;
-  color: white;
-  border: none;
+  max-height: 200px;
+  object-fit: contain;
+  margin-top: 10px;
   border-radius: 6px;
-  font-size: 1rem;
-  cursor: pointer;
-  font-weight: 600;
-}
-
-button:hover {
-  background: #005bbb;
+  border: 1px solid #ddd;
 }
 </style>
