@@ -62,6 +62,7 @@ function sendToTelegram() {
   }
 
   Telegram.WebApp.sendData(JSON.stringify(message))
+  Telegram.WebApp.close()
 }
 </script>
 
