@@ -71,7 +71,7 @@ function sendToTelegram() {
     price: parseInt(price.value, 10) || 0,
     currency: currency.value,
     link: link.value.trim(),
-    image: image.value,
+    // image: image.value,
   }
 
   Telegram.WebApp.sendData(JSON.stringify(message))
