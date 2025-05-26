@@ -5,6 +5,7 @@ import vueDevTools from 'vite-plugin-vue-devtools'
 
 export default defineConfig({
   base: '/wishBot_webApp/',
+  
   plugins: [
     vue(),
     vueDevTools(),
